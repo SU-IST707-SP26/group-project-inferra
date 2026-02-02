@@ -3,9 +3,9 @@ Early Warning System for Pandemic Risk Using WHO Surveillance Data
 
 ### Team
 
-Roshni Ramesh More (GitHub: RoshniRMore)
+Roshni Ramesh More (GitHub: [ RoshniRMore](https://github.com/RoshniRMore))
 
-Jayesh Vinod Sawarkar (GitHub: jayeshsawarkar) — Point of Contact (POC)
+Jayesh Vinod Sawarkar (GitHub: [ jayeshsawarkar](https://github.com/jayeshsawarkar)) — Point of Contact (POC)
 
 Insha Maniyar (GitHub id:[ inshamaniyar77](https://github.com/inshamaniyar77))
 
