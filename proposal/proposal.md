@@ -1,10 +1,36 @@
 ### Title
+Early Warning System for Pandemic Risk Using WHO Surveillance Data
 
 ### Team
 
+Roshni Ramesh More (GitHub:https://github.com/RoshniRMore)
+
+Jayesh Vinod Sawarkar (GitHub: id) — Point of Contact (POC)
+
+Insha Maniyar (GitHub id: inshamaniyar77)
+
 ### Introduction
 
+We aim to build an early warning system that uses routinely reported public health data to identify whether disease spread is accelerating in a way that may signal a future pandemic. Instead of reacting after outbreaks peak, this system focuses on detecting early signs of rapid growth.
+Most existing systems emphasize retrospective reporting. Our approach reframes surveillance data as a forward-looking risk prediction problem, using growth patterns, trends, and anomalies to estimate short-term outbreak risk before cases surge.
+International organizations, governments, and public health agencies rely on early signals to allocate resources, issue advisories, and prepare healthcare systems. Earlier detection can reduce preventable illness, deaths, and economic disruption.
+
 ### Literature Review
+
+Current Practice and Limitations
+Traditional disease surveillance systems rely on reported case counts and historical summaries, which often identify outbreaks only after sustained transmission has occurred. Recent research highlights the importance of growth-based indicators and anomaly detection for outbreak detection, particularly when reporting frequency varies across countries. However, many systems remain descriptive rather than predictive.
+
+Stakeholders and Their Needs
+
+    ____________________________________________________________________________________________________________
+              Stakeholder                   |      Why They Care          |           Key Need
+    _____________________________________________________________________________________________________________
+      WHO emergency response teams          |  Global outbreak monitoring | Early detection of abnormal growth
+      National public health agencies       |   Domestic preparedness     | Country-level risk signals
+      Policymakers                          |      Resource allocation    | Clear, interpretable risk categories 
+      Researchers                           |   Epidemiological insight   | Reproducible trend and surge analysis
+____________________________________________________________________________________________________________________
+
 
 ### Data and Methods
 
