@@ -7,7 +7,7 @@ Roshni Ramesh More (GitHub: RoshniRMore)
 
 Jayesh Vinod Sawarkar (GitHub: jayeshsawarkar) — Point of Contact (POC)
 
-Insha Maniyar (GitHub id: inshamaniyar77)
+Insha Maniyar (GitHub id:[ inshamaniyar77](https://github.com/inshamaniyar77))
 
 ### Introduction
 
@@ -23,7 +23,7 @@ Traditional disease surveillance systems rely on reported case counts and histor
 Stakeholders and Their Needs
 
     ____________________________________________________________________________________________________________
-              Stakeholder                   |      Why They Care          |           Key Need
+              Stakeholder                   |      Why They Care          |           Key Needs
     _____________________________________________________________________________________________________________
       WHO emergency response teams          |  Global outbreak monitoring | Early detection of abnormal growth
       National public health agencies       |   Domestic preparedness     | Country-level risk signals
