@@ -3,9 +3,9 @@ Early Warning System for Pandemic Risk Using WHO Surveillance Data
 
 ### Team
 
-Roshni Ramesh More (GitHub:https://github.com/RoshniRMore)
+Roshni Ramesh More (GitHub: RoshniRMore)
 
-Jayesh Vinod Sawarkar (GitHub: id) — Point of Contact (POC)
+Jayesh Vinod Sawarkar (GitHub: jayeshsawarkar) — Point of Contact (POC)
 
 Insha Maniyar (GitHub id: inshamaniyar77)
 
@@ -81,9 +81,9 @@ This phase will incorporate communicable disease indicators, mortality metrics, 
 
 ---
 
-#### Methods
+### Methods
 
-## Feature Engineering
+#### Feature Engineering
 All features use only data available up to week *t*.
 
 * **Current level:** Cases and deaths per 100k, plus 2–4 week rolling averages to reduce reporting noise.
@@ -93,7 +93,7 @@ All features use only data available up to week *t*.
 * **Seasonality:** Week-of-year encoded cyclically (sin/cos) to account for recurring patterns.
 * **Optional enrichment:** Includes GHO indicators such as healthcare capacity proxies.
 
-## Modeling Strategy
+#### Modeling Strategy
 
 **Baselines**
 * Rule-based alerts using growth and deviation thresholds.
@@ -107,7 +107,7 @@ All features use only data available up to week *t*.
 * **Random Forest:** Robust nonlinear baseline.
 * **Gradient Boosting:** Primary candidate due to strong tabular performance.
 
-## Evaluation
+#### Evaluation
 * **Forecasting:** Mean Absolute Error (MAE).
 * **Surge detection:** Precision, Recall, F1, PR-AUC.
 * **Validation:** Rolling / expanding window cross-validation.
