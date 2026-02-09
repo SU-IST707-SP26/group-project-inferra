@@ -48,10 +48,80 @@
 ---
 
 #### Phase 2: Country-Specific Reporting for Other Diseases (Planned / In Progress)
-**Source:** WHO Global Health Observatory (GHO)  
-🔗 https://www.who.int/data/gho  
+## A: Australia (NNDSS Fortnightly Reports)
 
-This phase will incorporate communicable disease indicators, mortality metrics, and health system proxies to generalize the early warning framework beyond COVID-19.
+### Dataset Overview  
+**Dataset Name:** National Notifiable Diseases Surveillance System (NNDSS) – Fortnightly Reports (Merged Dataset)  
+**Source:** Australian Government Department of Health and Aged Care  
+**Data Link:** NNDSS Public Reports Collection :contentReference[oaicite:0]{index=0}  
+**Merged File Used:** `merged_nndss_all_diseases.xlsx`
+
+### Dataset Structure  
+- **Rows:** 76 diseases  
+- **Columns:** 50 total  
+  - 1 column: `Disease_Name`  
+  - 49 columns: Fortnightly reporting periods  
+- **Time Period Covered:** December 2023 – November 2025  
+- **Temporal Resolution:** Fortnightly (bi-weekly aggregated case counts)
+
+**Column Format:**  
+- `Disease_Name` (categorical)  
+- `FN##_YEAR` (e.g., FN01_2024, FN02_2024, … FN25_2025)
+
+**Feature Types:**  
+- Disease names: Categorical (string)  
+- Case counts: Numerical (integer)
+
+### Diseases Covered  
+The dataset includes 76 nationally notifiable diseases across Australia, including:
+
+- **Bloodborne:** Hepatitis B, Hepatitis C, Hepatitis D, HIV  
+- **Gastrointestinal:** Campylobacteriosis, Salmonellosis, Listeriosis, Cryptosporidiosis  
+- **Vaccine-preventable:** Measles, Mumps, Pertussis, Influenza  
+- **Vector-borne:** Dengue, Ross River virus, Barmah Forest virus  
+- **Respiratory:** COVID-19, Influenza, Legionellosis  
+- **Sexually transmitted infections:** Chlamydia, Gonorrhoea, Syphilis  
+
+### Data Provenance & Reliability  
+
+- **Official Government Source:**  
+  - Managed by the Australian Government Department of Health and Aged Care  
+  - Part of the National Notifiable Diseases Surveillance System (NNDSS)  
+  - Legally mandated under the National Health Security Act 2007  
+
+- **Collection Process:**  
+  1. Medical practitioners and laboratories report cases to state/territory health authorities  
+  2. States and territories validate and submit data to the national NNDSS system  
+  3. The Department of Health aggregates and publishes fortnightly reports  
+  4. Data is de-identified to protect patient privacy  
+
+- **Reliability Indicators:**  
+  - Authoritative national surveillance system  
+  - Standardized disease definitions (ICD-based classifications)  
+  - Multi-level quality control and validation  
+  - Regular, consistent reporting schedule  
+  - Transparent metadata and documentation  
+
+### Metadata Availability  
+Each original NNDSS fortnightly report includes:  
+- Reporting period dates  
+- State/territory-level breakdowns  
+- Disease definitions and classifications  
+- Data collection methodology  
+- Interpretation notes and caveats  
+- Historical comparison metrics (e.g., YTD, rolling averages)
+
+### Data Completeness  
+
+- **2024 Coverage:** 25 of 26 fortnights (~96% complete)  
+- **2025 Coverage:** 24 of 26 fortnights (~92% complete)  
+- **Known Missing Fortnights:** FN26_2024, FN25_2025, FN26_2025  
+- **Handling Missing Data:** Missing values may appear as 0 or can be treated as NA depending on analysis approach  
+
+### Geographic Coverage  
+
+- Nationwide aggregated data across all Australian states and territories  
+- Original source files include state-level breakdowns (ACT, NSW, NT, QLD, SA, TAS, VIC, WA)  
 
 ---
 
