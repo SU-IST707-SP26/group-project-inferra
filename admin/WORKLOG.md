@@ -14,3 +14,12 @@
 **Impact**: All three datasets are now clean and consistent.
 
 **Next Steps**: Combine them into one dataset (if needed) and start baseline modeling + evaluation.
+
+## 2026-02-16 - Dataset Refinement (Team)
+Based on instructor feedback, we're narrowing our project scope to focus on a specific disease (flu, COVID-19, etc.) in an isolated region, preferably Australia or New Zealand. This focused approach will allow us to better incorporate epidemiological factors such as R_0 (basic reproduction number), regional contact rates, transmission modes, and population mobility patterns into our prediction model.
+
+**Steps In Progress**: 
+- Currently researching outbreak datasets for our chosen disease/region and reviewing epidemiology literature on R_0 modeling to inform our model development.
+- https://www.health.govt.nz/covid-19-novel-coronavirus
+- https://info.flutracking.net/reports/new-zealand-reports/
+- https://www.phfscience.nz/digital-library/?researchType%5B0%5D=reportItem
