@@ -35,7 +35,7 @@ Our approach uses epidemiologically grounded features — Rt estimates, growth r
 <!-- ROSHNI: Write this section. Include:
    - WHO COVID-19 dataset description (rows, columns, time span, countries)
    - Australia NNDSS dataset description (76 diseases, fortnightly, provenance)
-   - Singapore dataset description (weekly bulletin, Insha's cleaning)
+   - New Zealand COVID dataset (316 weeks from WHO, same pipeline as Australia)
    - Population data source (World Bank)
    - 2-5 key visualizations:
      1. Global COVID training data overview (239 countries)
@@ -92,7 +92,7 @@ Our approach uses epidemiologically grounded features — Rt estimates, growth r
 | `work/data_extract_aus_biweekly.ipynb` | Extracts RSV and Measles subsets from merged NNDSS |
 | `work/modeling_v1_aus_only.ipynb` | Initial modeling: Australia-only, 80/20 split, 4 classifiers |
 | `work/modeling_v2_global_with_regression.ipynb` | Final modeling: global training, Aus/RSV test sets, regression + classification, horizon analysis |
-| `Data/Singapore InfectiousDiseases.ipynb` | Singapore data cleaning and validation |
+| (NZ extracted from WHO cleaned CSV) | No separate notebook needed — same pipeline as Australia |
 | `inferra_dashboard/app.py` | Streamlit dashboard for stakeholder use |
 
 ## Results
@@ -127,7 +127,7 @@ These results connect to our stakeholder's needs in concrete ways. An agency mon
    - Rt estimation is a proxy, not true epidemiological R0
    - Cross-disease threshold calibration not solved
    - Limited to respiratory diseases tested so far
-   - Singapore validation not yet complete
+   - Only tested on two geographic regions (Australia, New Zealand)
    - No mobility or population density features incorporated
 -->
 
@@ -140,7 +140,7 @@ These results connect to our stakeholder's needs in concrete ways. An agency mon
    - Incorporate mobility and population density features
    - Test on additional diseases (Influenza, Dengue)
    - Add NZ as additional geographic test
-   - Complete Singapore external validation
+   - Validate on additional countries (Singapore, South Korea, Japan)
    - Build automated retraining pipeline
    - Threshold calibration for cross-disease deployment
    - Integration with real-time surveillance feeds

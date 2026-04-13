@@ -21,7 +21,7 @@ The system uses epidemiologically grounded features: estimated reproduction numb
 - Feature-engineered datasets for COVID (WHO) and respiratory diseases (NNDSS)
 - Classification and regression models with horizon analysis
 - Streamlit dashboard for public health agency use
-- Singapore data for external validation
+- New Zealand COVID data as additional geographic test (isolated island nation)
 
 ---
 

@@ -12,7 +12,7 @@ Do not commit large data files to this repo.
 | AUS_rsv.xlsx | Extracted from NNDSS | Run `work/data_extract_aus_biweekly.ipynb` |
 | AUS_measles.xlsx | Extracted from NNDSS | Run `work/data_extract_aus_biweekly.ipynb` |
 | population.csv | World Bank | https://github.com/datasets/population |
-| Singapore data | Singapore MOH | https://data.gov.sg/datasets?query=infectious+disease+bulletin |
+| NZ COVID data | Extracted from WHO cleaned CSV | Filter Country_code == NZ from WHO_COVID19_cleaned.csv |
 
 ## Reproduction
 Run the notebooks in `work/` in this order:

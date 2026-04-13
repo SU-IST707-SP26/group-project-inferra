@@ -26,13 +26,13 @@
 - ✅ M3.T4 — Run classification horizon analysis (1-8 weeks ahead) (RM)
 - ✅ M3.T5 — Add regression models (RF, GB, XGB regressors) for y_2/4/6/8 targets (JS)
 - ✅ M3.T6 — Run regression horizon analysis (MAE vs forecast horizon) (JS)
-- ⏳ M3.T7 — Validate models on Singapore data as external test set (IM)
-- [ ] M3.T8 — Add NZ COVID data as additional geographic test (IM)
+- ❌ M3.T7 — Singapore validation deferred to future work
+- ⏳ M3.T8 — Add NZ COVID data as Test Set 3 from existing WHO cleaned data (RM)
 
 ### Milestone 4: Dashboard
 - ✅ M4.T1 — Build Streamlit dashboard with WHO-style UI (RM)
 - ⏳ M4.T2 — Integrate updated model results into dashboard (RM)
-- [ ] M4.T3 — Add Singapore results to dashboard (IM)
+- ❌ M4.T3 — Singapore dashboard deferred to future work
 
 ### Milestone 5: Presentation (Checkpoint 3)
 - [ ] M5.T1 — Create 7-8 slide presentation per rubric (Team)

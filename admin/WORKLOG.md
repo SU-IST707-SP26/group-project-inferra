@@ -1,5 +1,18 @@
 # WORKLOG.md
 
+## 2026-04-14 — Scope Update: AUS + NZ Focus (JS)
+
+**Context**: Team decided to focus on Australia + New Zealand, defer Singapore to future work.
+
+**Work Completed**:
+- Updated VISION.md, WORKPLAN.md to reflect AUS + NZ scope
+- NZ COVID data already exists in WHO_COVID19_cleaned.csv (316 weekly rows)
+- No new data collection needed — just run through existing pipeline
+
+**Next Steps**: Roshni to add NZ as Test Set 3 in modeling notebook.
+
+---
+
 ## 2026-04-13 — Project Review & Final Planning (JS)
 
 **Context**: Reviewed full project repo to plan final submission tasks.
