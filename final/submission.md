@@ -97,18 +97,47 @@ Our approach uses epidemiologically grounded features — Rt estimates, growth r
 
 ## Results
 
-<!-- TEAM: Fill in after running code_updated.ipynb. Include:
-   - Classification results table (AUC, F1, Precision, Recall per model)
-   - Regression results table (MAE per horizon per model)
-   - Horizon analysis chart (AUC vs weeks ahead) — THE KEY CHART
-   - Regression MAE vs horizon chart
-   - Cross-disease results (COVID→RSV AUC)
-   - Feature importance chart
-   - Confusion matrix for best model
-   - Screenshot of Streamlit dashboard
--->
+### Classification: Surge Detection on Australia COVID
 
-*[To be completed after running final models]*
+The model was trained on 239 countries (74,090 weekly observations) and tested on held-out Australia (310 weeks, 27 surge weeks). Current-period detection achieved near-perfect scores across all models:
+
+| Model | ROC-AUC | F1 | Precision | Recall |
+|-------|---------|-----|-----------|--------|
+| Logistic Regression | 0.995 | 0.964 | 0.931 | 1.000 |
+| Random Forest | 1.000 | 1.000 | 1.000 | 1.000 |
+| Gradient Boosting | 1.000 | 0.981 | 1.000 | 0.963 |
+| XGBoost | 1.000 | 0.941 | 1.000 | 0.889 |
+
+**Important caveat:** AUC ~1.0 at horizon=0 reflects autocorrelation in epidemic data — features like lag_1 and Rt are computed from recent cases, and the surge label is also derived from Rt. This is expected and not operationally useful. The horizon analysis below provides the true measure of early warning capability.
+
+### Horizon Analysis: Timing vs Accuracy Tradeoff
+
+This is the core experiment requested by the professor. As the forecast horizon increases, classification AUC degrades — confirming that earlier predictions are harder but still actionable at 1-2 weeks:
+
+Classification (ROC-AUC) and Regression (MAE in cases_per_100k) both show the expected degradation with horizon, demonstrating the fundamental tradeoff between forecast lead time and prediction accuracy. Random Forest Regressor achieved the best results at all horizons (2-week MAE = 46.41, 4-week MAE = 94.99).
+
+### Cross-Disease Generalization: COVID → RSV
+
+The COVID-trained model was tested on Australia RSV data (43 fortnights, 14 surge periods). Logistic Regression achieved AUC = 0.923, meaning it correctly ranks surge periods above normal periods. However, F1 = 0.000 because the model's probability calibration does not transfer across diseases — all RSV predictions fell below the 0.5 threshold.
+
+After threshold recalibration (optimal threshold search), F1 improved from 0.000 to 0.848, demonstrating that the model captures genuine surge signal across diseases but requires domain-specific calibration for deployment.
+
+### State Propagation Analysis
+
+Cross-correlation analysis of state-level RSV Rt values revealed that NSW leads other states by 2-8 weeks. Key findings:
+- NSW → VIC: peak correlation r = 0.835 at 4-week lag
+- NSW → SA: peak correlation r = 0.738 at 8-week lag
+- Granger causality confirms NSW significantly predicts VIC (p = 0.002), SA (p = 0.001), and WA (p = 0.007)
+
+This establishes NSW as Australia's "canary state" for RSV surveillance — an operationally useful finding for our stakeholder.
+
+### Feature Importance
+
+The top 3 features driving surge prediction are Rt (45.8%), growth_4w (24.5%), and z-score (11.0%). This confirms the professor's recommendation to explicitly model the reproduction number — Rt alone accounts for nearly half of the model's predictive power.
+
+### Prototype Dashboard
+
+A Streamlit dashboard was built for stakeholder use, featuring four pages: situation overview with live Rt metrics and alert banners, early warning signal tracking, state surge propagation maps, and model documentation. The dashboard can be launched via `streamlit run inferra_dashboard/app.py`. A screenshot is available in the supporting notebooks.
 
 ## Discussion
 
