@@ -39,8 +39,8 @@
 - [ ] M5.T2 — Rehearse presentation (Team)
 
 ### Milestone 6: Final Report & Submission
-- [ ] M6.T1 — Rename Code/ folder to work/ per rubric requirements (JS)
-- [ ] M6.T2 — Rename and organize notebooks with clear names (JS)
+- ✅ M6.T1 — Rename Code/ folder to work/ per rubric requirements (JS)
+- ✅ M6.T2 — Rename and organize notebooks with clear names (JS)
 - [ ] M6.T3 — Write submission.md in final/ folder with all required sections (Team)
   - [ ] M6.T3a — Title, Team, Introduction (JS)
   - [ ] M6.T3b — Literature Review (IM)
@@ -50,7 +50,7 @@
   - [ ] M6.T3f — Discussion: stakeholder connection (JS)
   - [ ] M6.T3g — Limitations and Future Work (IM)
 - [ ] M6.T4 — Create supporting files index in report (JS)
-- [ ] M6.T5 — Remove data files from repo, provide download links instead (JS)
+- ✅ M6.T5 — Remove data files from repo, provide download links instead (JS)
 - [ ] M6.T6 — Final review and submission (Team)
 
 ## Changelog
