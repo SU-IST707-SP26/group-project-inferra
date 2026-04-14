@@ -21,7 +21,7 @@
 **Work Completed**:
 - Updated VISION.md, WORKPLAN.md to reflect AUS + NZ scope
 - NZ COVID data already exists in WHO_COVID19_cleaned.csv (316 weekly rows)
-- NZ-specific respiratory surveillance data collected separately by Insha — 2026-04-14 NZ Virology Data Collection entry
+- NZ-specific respiratory surveillance data collected
 
 **Next Steps**: Add NZ as Test Set 3 in modeling notebook.
 
