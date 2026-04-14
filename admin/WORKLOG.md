@@ -1,5 +1,17 @@
 # WORKLOG.md
 
+## 2026-04-14 — NZ Virology Data Collection (Insha)
+
+**Context:** Team scoped to AUS + NZ focus. Collected NZ respiratory surveillance data to complement Australia NNDSS dataset.
+
+**Work Completed:**
+- Built automated scraper in Jupyter Notebook to batch-download weekly virology PDFs from PHF Science (NZ govt public health institute)
+- Extracted weekly counts for influenza A/B subtypes, RSV, SARS-CoV-2, rhinovirus, adenovirus, hMPV, parainfluenza, and enterovirus
+- Saved to NZ_Airborne_Disease_Data.xlsx with per-year sheets + pivot table (2,728 rows, 2021–2025)
+- Files Created: NZ_Airborne_Disease_Scraper.ipynb, NZ_Airborne_Disease_Data.xlsx
+
+**Next Steps:**  Standardize epi-week format, add week_start_date, merge with Australia dataset for R_t modeling
+
 ## 2026-04-14 — Scope Update: AUS + NZ Focus (JS)
 
 **Context**: Team decided to focus on Australia + New Zealand, defer Singapore to future work.
@@ -7,9 +19,9 @@
 **Work Completed**:
 - Updated VISION.md, WORKPLAN.md to reflect AUS + NZ scope
 - NZ COVID data already exists in WHO_COVID19_cleaned.csv (316 weekly rows)
-- No new data collection needed — just run through existing pipeline
+- NZ-specific respiratory surveillance data collected separately by Insha — 2026-04-14 NZ Virology Data Collection entry
 
-**Next Steps**: Roshni to add NZ as Test Set 3 in modeling notebook.
+**Next Steps**: Add NZ as Test Set 3 in modeling notebook.
 
 ---
 
@@ -119,7 +131,7 @@
 
 ---
 
-## 2026-02-09 — 3 Datasets Identified + Cleaned (Team)
+## 2026-02-09 — 3 Datasets Identified + Cleaned (Insha)
 
 **Context**: Setting up the “Predicting Pandemic Risk from Disease Surveillance Data” project by finding datasets and cleaning them into a consistent weekly format.
 
@@ -134,7 +146,7 @@
 
 **Next Steps**: Combine them into one dataset (if needed) and start baseline modeling + evaluation.
 
-## 2026-02-16 - Dataset Refinement (Team)
+## 2026-02-16 - Dataset Refinement (Insha)
 Based on instructor feedback, we're narrowing our project scope to focus on a specific disease (flu, COVID-19, etc.) in an isolated region, preferably Australia or New Zealand. This focused approach will allow us to better incorporate epidemiological factors such as R_0 (basic reproduction number), regional contact rates, transmission modes, and population mobility patterns into our prediction model.
 
 **Steps In Progress**: 
