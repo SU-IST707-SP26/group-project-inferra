@@ -7,8 +7,8 @@
 **Work Completed:**
 - Built automated scraper in Jupyter Notebook to batch-download weekly virology PDFs from PHF Science (NZ govt public health institute)
 - Extracted weekly counts for influenza A/B subtypes, RSV, SARS-CoV-2, rhinovirus, adenovirus, hMPV, parainfluenza, and enterovirus
-- Saved to NZ_Airborne_Disease_Data.xlsx with per-year sheets + pivot table (2,728 rows, 2021–2025)
-- Files Created: NZ_Airborne_Disease_Scraper.ipynb, NZ_Airborne_Disease_Data.xlsx
+- Saved to (../Data/NZ_Airborne_Disease_Data.xlsx) with per-year sheets + pivot table (2,728 rows, 2021–2025)
+- Files Created: (../Data/NZ_Airborne_Disease_Scraper.ipynb, NZ_Airborne_Disease_Data.xlsx)
 
 **Next Steps:**  Standardize epi-week format, add week_start_date, merge with Australia dataset for R_t modeling
 
