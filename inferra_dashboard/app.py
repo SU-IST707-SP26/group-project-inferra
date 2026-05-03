@@ -83,8 +83,9 @@ def load_model():
 
 rsv_nat, rsv_st, rsv_pred, covid, horizon, feat_imp = load_base()
 bundle = load_model()
-MODEL  = bundle["model"]
-FEATS  = bundle["feature_cols"]
+MODEL      = bundle["model"]
+FEATS      = bundle["feature_cols"]
+MODEL_NAME = bundle.get("model_name", "Random Forest")
 THEME  = dict(plot_bgcolor="white", paper_bgcolor="white",
               font=dict(family="Arial", size=12, color="#333"),
               margin=dict(l=45, r=25, t=45, b=45))
@@ -282,18 +283,44 @@ elif "Surveillance" in page:
     if len(feat_df)<10:
         st.warning(f"Not enough data for {selected}.")
     else:
-        feat_df["prob_2w"] = predict_surge(feat_df,2)
-        feat_df["prob_4w"] = predict_surge(feat_df,4)
+        # ── Forecast horizon selector ─────────────────────────────────────
+        # Reviewer feedback: let users pick the forecast horizon via a
+        # dropdown and show the rough model accuracy at that horizon.
+        horizon_opts = {
+            "1 week ahead":  1,
+            "2 weeks ahead": 2,
+            "3 weeks ahead": 3,
+            "4 weeks ahead": 4,
+        }
+        hcol, _ = st.columns([1, 3])
+        with hcol:
+            horizon_label = st.selectbox(
+                "Forecast horizon",
+                list(horizon_opts.keys()),
+                index=1,  # default to 2 weeks
+                help="Shorter horizons are more accurate; longer horizons give more lead time to act.",
+            )
+        selected_h = horizon_opts[horizon_label]
+        h_word = "week" if selected_h == 1 else "weeks"
+
+        # Look up rough accuracy (test-set AUC) for the loaded model
+        # at the selected horizon, from horizon_results.csv.
+        h_row = horizon[(horizon["Model"]==MODEL_NAME) & (horizon["Horizon_weeks"]==selected_h)]
+        auc_sel = float(h_row["AUC"].iloc[0]) if len(h_row) else 0.5
+        acc_pct = auc_sel * 100  # rough accuracy proxy
+
+        # Predict surge probability at the selected horizon
+        feat_df[f"prob_{selected_h}w"] = predict_surge(feat_df, selected_h)
+        psel_series = feat_df[f"prob_{selected_h}w"].dropna()
+        psel = psel_series.iloc[-1] if len(psel_series) else 0
         lc = feat_df.dropna(subset=["Rt"]).iloc[-1]
         rt_c = lc["Rt"]
-        p2 = feat_df["prob_2w"].dropna().iloc[-1] if feat_df["prob_2w"].dropna().shape[0] else 0
-        p4 = feat_df["prob_4w"].dropna().iloc[-1] if feat_df["prob_4w"].dropna().shape[0] else 0
 
-        m1,m2,m3,m4 = st.columns(4)
-        m1.markdown(f'<div class="kpi"><div class="kpi-label">Current R\u209c</div><div class="kpi-value" style="color:{"#c62828" if rt_c>1.05 else "#f57f17" if rt_c>0.98 else "#2e7d32"}">{rt_c:.3f}</div><div class="kpi-sub">{"Growing" if rt_c>1.05 else "Stable" if rt_c>0.98 else "Declining"}</div></div>',unsafe_allow_html=True)
-        m2.markdown(f'<div class="kpi"><div class="kpi-label">Latest weekly cases</div><div class="kpi-value">{int(lc["Cases"]):,}</div><div class="kpi-sub">{lc["Date"].strftime("%d %b %Y")}</div></div>',unsafe_allow_html=True)
-        m3.markdown(f'<div class="kpi"><div class="kpi-label">Surge prob \u2014 2 weeks</div><div class="kpi-value" style="color:{"#c62828" if p2>0.5 else "#f57f17" if p2>0.3 else "#2e7d32"}">{p2*100:.0f}%</div><div class="kpi-sub">Model confidence</div></div>',unsafe_allow_html=True)
-        m4.markdown(f'<div class="kpi"><div class="kpi-label">Surge prob \u2014 4 weeks</div><div class="kpi-value" style="color:{"#c62828" if p4>0.5 else "#f57f17" if p4>0.3 else "#2e7d32"}">{p4*100:.0f}%</div><div class="kpi-sub">Model confidence</div></div>',unsafe_allow_html=True)
+        m1, m2, m3, m4 = st.columns(4)
+        m1.markdown(f'<div class="kpi"><div class="kpi-label">Current R\u209c</div><div class="kpi-value" style="color:{"#c62828" if rt_c>1.05 else "#f57f17" if rt_c>0.98 else "#2e7d32"}">{rt_c:.3f}</div><div class="kpi-sub">{"Growing" if rt_c>1.05 else "Stable" if rt_c>0.98 else "Declining"}</div></div>', unsafe_allow_html=True)
+        m2.markdown(f'<div class="kpi"><div class="kpi-label">Latest weekly cases</div><div class="kpi-value">{int(lc["Cases"]):,}</div><div class="kpi-sub">{lc["Date"].strftime("%d %b %Y")}</div></div>', unsafe_allow_html=True)
+        m3.markdown(f'<div class="kpi"><div class="kpi-label">Surge prob \u2014 {selected_h} {h_word}</div><div class="kpi-value" style="color:{"#c62828" if psel>0.5 else "#f57f17" if psel>0.3 else "#2e7d32"}">{psel*100:.0f}%</div><div class="kpi-sub">Model confidence</div></div>', unsafe_allow_html=True)
+        m4.markdown(f'<div class="kpi"><div class="kpi-label">Model accuracy</div><div class="kpi-value">~{acc_pct:.0f}%</div><div class="kpi-sub">{MODEL_NAME} \u00b7 AUC at {selected_h}{h_word[0]}</div></div>', unsafe_allow_html=True)
         st.markdown("")
 
         hist_clean = trim_trailing_zeros(feat_df[feat_df["Cases"] >= 0]).copy()
@@ -323,8 +350,7 @@ elif "Surveillance" in page:
             elif prob > 0.3: return "MODERATE", "#f57f17", "\u26a1"
             else:            return "LOW", "#2e7d32", "\u2713"
 
-        lbl2,col2,ico2 = surge_label(p2)
-        lbl4,col4,ico4 = surge_label(p4)
+        lbl_sel, col_sel, ico_sel = surge_label(psel)
         lbl_rt,col_rt,ico_rt = ("GROWING","#c62828","\u25b2") if rt_c>1.05 else \
                                 ("STABLE","#f57f17","\u25cf") if rt_c>0.98 else \
                                 ("DECLINING","#2e7d32","\u25bc")
@@ -332,23 +358,23 @@ elif "Surveillance" in page:
         fc1.markdown(f'''<div class="kpi"><div class="kpi-label">Current trend</div>
             <div class="kpi-value" style="color:{col_rt}">{ico_rt} {lbl_rt}</div>
             <div class="kpi-sub">R\u209c = {rt_c:.3f}</div></div>''', unsafe_allow_html=True)
-        fc2.markdown(f'''<div class="kpi"><div class="kpi-label">Surge risk \u2014 2 weeks</div>
-            <div class="kpi-value" style="color:{col2}">{ico2} {lbl2}</div>
-            <div class="kpi-sub">{p2*100:.0f}% model confidence</div></div>''', unsafe_allow_html=True)
-        fc3.markdown(f'''<div class="kpi"><div class="kpi-label">Surge risk \u2014 4 weeks</div>
-            <div class="kpi-value" style="color:{col4}">{ico4} {lbl4}</div>
-            <div class="kpi-sub">{p4*100:.0f}% model confidence</div></div>''', unsafe_allow_html=True)
+        fc2.markdown(f'''<div class="kpi"><div class="kpi-label">Surge risk \u2014 {selected_h} {h_word}</div>
+            <div class="kpi-value" style="color:{col_sel}">{ico_sel} {lbl_sel}</div>
+            <div class="kpi-sub">{psel*100:.0f}% model confidence</div></div>''', unsafe_allow_html=True)
+        fc3.markdown(f'''<div class="kpi"><div class="kpi-label">Model accuracy</div>
+            <div class="kpi-value">~{acc_pct:.0f}%</div>
+            <div class="kpi-sub">{MODEL_NAME} \u00b7 test-set AUC at {selected_h}{h_word[0]}</div></div>''', unsafe_allow_html=True)
 
-        interp_color = "box-red" if p2>0.6 or p4>0.6 else \
-                       "box-amber" if p2>0.3 or p4>0.3 else "box-green"
+        interp_color = "box-red" if psel>0.6 else \
+                       "box-amber" if psel>0.3 else "box-green"
         interp_msg = (
             f"The model detects a <strong>high probability of a COVID-19 surge in {selected}</strong> "
-            f"within the next 2\u20134 weeks. Public health agencies should review surge preparedness protocols."
-        ) if p2>0.6 or p4>0.6 else (
-            f"There is a <strong>moderate surge signal for {selected}</strong>. "
+            f"within the next {selected_h} {h_word}. Public health agencies should review surge preparedness protocols."
+        ) if psel>0.6 else (
+            f"There is a <strong>moderate surge signal for {selected}</strong> over the next {selected_h} {h_word}. "
             f"R\u209c = {rt_c:.3f} suggests monitoring is warranted but no immediate action required."
-        ) if p2>0.3 or p4>0.3 else (
-            f"The model shows <strong>low surge risk for {selected}</strong> over the next 4 weeks. "
+        ) if psel>0.3 else (
+            f"The model shows <strong>low surge risk for {selected}</strong> over the next {selected_h} {h_word}. "
             f"Current R\u209c = {rt_c:.3f} \u2014 transmission is {lbl_rt.lower()}."
         )
         st.markdown(f'<div class="{interp_color}" style="margin-top:10px;font-size:13px">{interp_msg}</div>',
@@ -814,4 +840,4 @@ elif "Advisory" in page:
     c3.markdown("""- WHO advice: **who.int/covid19/advice-for-public**\n- Australian updates: **health.gov.au/covid19**\n- Long COVID support: **health.gov.au/long-covid**\n- Follow your state health department for local alerts\n- Emergency signs — breathing difficulty, chest pain: seek care immediately""")
 
     st.markdown("---")
-    st.caption("Data: NNDSS Fortnightly Reports \u00b7 WHO COVID-19 Global Data \u00b7 ABS / Stats NZ Population Estimates \u00b7 PHF Science NZ Virology \u00b7 Inferra ML model (IST 707)")
+    st.caption("Data: NNDSS Fortnightly Reports \u00b7 WHO COVID-19 Global Data \u00b7 ABS / Stats NZ Population Estimates \u00b7 PHF Science NZ Virology \u00b7 Inferra ML model (IST 718)")
