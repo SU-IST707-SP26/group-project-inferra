@@ -1,10 +1,9 @@
 """
 Inferra — Infectious Disease Surge Early Warning System
-4 pages:
-  Page 1 — Technical Summary (professor / technical)
+3 pages:
+  Page 1 — Technical Summary
   Page 2 — Disease Surveillance (COVID dropdown + AUS RSV)
-  Page 3 — New Zealand (Tests 3 & 4)
-  Page 4 — Public Advisory (plain English, traffic light)
+  Page 3 — Public Advisory (plain English, traffic light)
 """
 
 import streamlit as st
@@ -169,7 +168,7 @@ if "Summary" in page:
     </div>''', unsafe_allow_html=True)
 
     st.markdown('<div class="sec">What we built</div>', unsafe_allow_html=True)
-    c1,c2,c3 = st.columns(3)
+    c1,c2 = st.columns(2)
     c1.markdown("**Problem**")
     c1.markdown("Public health agencies need 2\u20134 weeks advance warning before a respiratory disease surge peaks \u2014 to issue communications, pre-position hospital capacity, and coordinate inter-state resources.")
     c2.markdown("**Solution**")
@@ -177,8 +176,6 @@ if "Summary" in page:
 - Detects whether a surge is approaching (classification)
 - Estimates surge magnitude (regression)
 - Generalises across geographies AND diseases""")
-    c3.markdown("**Novel finding**")
-    c3.markdown("NSW Granger-causes RSV surges in VIC (p=0.002, 4-week lead). Monitoring NSW gives VIC health agencies an extra 4 weeks of warning beyond the ML model alone.")
 
     st.markdown('<div class="sec">Training pipeline</div>', unsafe_allow_html=True)
     k1,k2,k3,k4 = st.columns(4)
