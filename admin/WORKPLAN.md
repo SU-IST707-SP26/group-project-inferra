@@ -27,11 +27,11 @@
 - ✅ M3.T5 — Add regression models (RF, GB, XGB regressors) for y_2/4/6/8 targets (JS)
 - ✅ M3.T6 — Run regression horizon analysis (MAE vs forecast horizon) (JS)
 - ❌ M3.T7 — Singapore validation deferred to future work
-- ⏳ M3.T8 — Add NZ COVID data as Test Set 3 from existing WHO cleaned data (RM)
+- ✅ M3.T8 — Add NZ COVID data as Test Set 3 from existing WHO cleaned data (RM)
 
 ### Milestone 4: Dashboard
 - ✅ M4.T1 — Build Streamlit dashboard with WHO-style UI (RM)
-- ⏳ M4.T2 — Integrate updated model results into dashboard (RM)
+- ✅ M4.T2 — Integrate updated model results into dashboard (RM)
 - ❌ M4.T3 — Singapore dashboard deferred to future work
 
 ### Milestone 5: Presentation (Checkpoint 3)
@@ -41,17 +41,17 @@
 ### Milestone 6: Final Report & Submission
 - ✅ M6.T1 — Rename Code/ folder to work/ per rubric requirements (JS)
 - ✅ M6.T2 — Rename and organize notebooks with clear names (JS)
-- ⏳ M6.T3 — Write submission.md in final/ folder with all required sections (Team)
-  - ⏳ M6.T3a — Title, Team, Introduction (JS)
-  - ⏳ M6.T3b — Literature Review (IM)
-  - ⏳ M6.T3c — Data section with 2-5 visualizations (RM)
-  - ⏳ M6.T3d — Methods section: features, Rt, models, horizons (Team)
-  - ⏳ M6.T3e — Results section with metrics, tables, charts (Team)
-  - ⏳ M6.T3f — Discussion: stakeholder connection (JS)
-  - ⏳ M6.T3g — Limitations and Future Work (IM)
+- ✅ M6.T3 — Write submission.md in final/ folder with all required sections (Team)
+  - ✅ M6.T3a — Title, Team, Introduction (JS)
+  - ✅ M6.T3b — Literature Review (IM)
+  - ✅ M6.T3c — Data section with 2-5 visualizations (RM)
+  - ✅ M6.T3d — Methods section: features, Rt, models, horizons (Team)
+  - ✅ M6.T3e — Results section with metrics, tables, charts (Team)
+  - ✅ M6.T3f — Discussion: stakeholder connection (JS)
+  - ✅ M6.T3g — Limitations and Future Work (IM)
 - ✅ M6.T4 — Create supporting files index in report (JS)
 - ✅ M6.T5 — Remove data files from repo, provide download links instead (JS)
-- [ ] M6.T6 — Final review and submission (Team)
+- ⏳ M6.T6 — Final review and submission (Team)
 
 ## Changelog
 

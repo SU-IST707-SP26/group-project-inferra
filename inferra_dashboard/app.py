@@ -836,5 +836,4 @@ elif "Advisory" in page:
     c3.markdown("**Stay informed**")
     c3.markdown("""- WHO advice: **who.int/covid19/advice-for-public**\n- Australian updates: **health.gov.au/covid19**\n- Long COVID support: **health.gov.au/long-covid**\n- Follow your state health department for local alerts\n- Emergency signs — breathing difficulty, chest pain: seek care immediately""")
 
-    st.markdown("---")
-    st.caption("Data: NNDSS Fortnightly Reports \u00b7 WHO COVID-19 Global Data \u00b7 ABS / Stats NZ Population Estimates \u00b7 PHF Science NZ Virology \u00b7 Inferra ML model (IST 718)")
+    st.caption("Data: NNDSS Fortnightly Reports · WHO COVID-19 Global Data · ABS / Stats NZ Population Estimates · PHF Science NZ Virology · Inferra ML model (IST 707)")
