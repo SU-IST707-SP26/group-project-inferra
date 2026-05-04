@@ -10,7 +10,7 @@
 
 Infectious disease surges do not announce themselves. By the time hospitals report overcrowding and health agencies confirm an outbreak, the window for early intervention has already closed. INFERRA is built for the people who need to act before that happens, specifically, surge preparedness officers within Australia's Communicable Disease Network (CDNA) and equivalent New Zealand health departments, who are responsible for pre-positioning antivirals, activating hospital surge protocols, and issuing public advisories. Their core need is simple: a reliable signal 1 to 2 weeks before a surge peaks, early enough to act but grounded enough to trust.
 
-To address this, we trained a machine learning early warning system on WHO COVID-19 surveillance data from 238 countries, then tested it on data it had never seen. Australia and New Zealand were fully held out from training. We asked three questions: can the model detect surges in a country it was never trained on, can it transfer from COVID-19 to a completely different disease (RSV), and can it do both simultaneously. We engineered 16 epidemiological features from raw case counts — most importantly the time-varying reproduction number Rₜ, which alone accounts for 42% of the model's predictive power, and evaluated four classifiers alongside regression models predicting surge size at 2, 4, 6, and 8-week horizons.
+To address this, we trained a machine learning early warning system on WHO COVID-19 surveillance data from 238 countries, then tested it on data it had never seen. Australia and New Zealand were fully held out from training. We asked three questions: can the model detect surges in a country it was never trained on, can it transfer from COVID-19 to a completely different disease (RSV), and can it do both simultaneously. We engineered 16 epidemiological features from raw case counts, most importantly the time-varying reproduction number Rₜ, which alone accounts for 42% of the model's predictive power, and evaluated four classifiers alongside regression models predicting surge size at 2, 4, 6, and 8-week horizons.
 
 The results are encouraging. Geographic generalization to both Australia and New Zealand COVID-19 achieves AUC above 0.99. Cross-disease transfer to Australian RSV achieves AUC = 0.920, and the model provides actionable early warning up to 4 weeks ahead before degrading to random. A Granger causality analysis of state-level NNDSS data reveals that NSW RSV surges predict Victorian surges 4 weeks later (p = 0.002), a structural early warning signal that works independently of the model. All findings are operationalized in a live Streamlit dashboard designed for direct stakeholder use.
 
@@ -33,7 +33,7 @@ INFERRA draws on four publicly available datasets, each serving a distinct role 
 
 WHO COVID-19 Global Surveillance Data
 
-The backbone of our training data is the [WHO COVID-19 Global Surveillance Data](https://data.who.int/dashboards/covid19/data?n=o), which tracks weekly new cases across 240 countries from January 2020 to January 2026. After removing negative counts, filling temporal gaps, and normalizing to cases per 100,000 population, the cleaned dataset contains 75,840 rows. Australia and New Zealand are excluded entirely from training — they appear nowhere in the model's learning process and are used only as held-out test sets. Surge weeks account for approximately 7% of all observations, reflecting how rare sustained outbreak periods are relative to baseline transmission.
+The backbone of our training data is the [WHO COVID-19 Global Surveillance Data](https://data.who.int/dashboards/covid19/data?n=o), which tracks weekly new cases across 240 countries from January 2020 to January 2026. After removing negative counts, filling temporal gaps, and normalizing to cases per 100,000 population, the cleaned dataset contains 75,840 rows. Australia and New Zealand are excluded entirely from training, they appear nowhere in the model's learning process and are used only as held-out test sets. Surge weeks account for approximately 7% of all observations, reflecting how rare sustained outbreak periods are relative to baseline transmission.
 
 Australian NNDSS - RSV Surveillance
 
@@ -51,7 +51,7 @@ Visualizations of the WHO COVID global case distribution, AUS RSV seasonal patte
 
 ### Methods
 
-*Feature Engineering*
+#### Feature Engineering
 
 One of the core design decisions in INFERRA was to avoid using raw case counts as model inputs. Case counts tell you how many people are sick today, but they don't tell you whether things are getting better or worse, how fast transmission is accelerating, or whether this week is unusually bad relative to recent history. To capture these dynamics, we engineer 16 features from each country's weekly time series, all computed using only past data so the model never has access to future information.
 The first step is normalization, converting raw cases to cases per 100,000 population. This allows direct comparison between a country of 5 million (New Zealand) and a country of 26 million (Australia) without the larger country always appearing to have more severe outbreaks simply because it has more people.
@@ -68,15 +68,15 @@ Rₜ (time-varying reproduction number): the single most important feature, acco
 
 The first 6 rows of each series are dropped after feature construction to remove NaN values from lag warmup.
 
-*Surge Labelling*
+#### Surge Labelling
 
 Before training, we need to tell the model which weeks were surge weeks and which were normal. We use two methods depending on data length. For COVID-19 series (100+ weeks): Rₜ > 1.2 for 3 or more consecutive weeks. For RSV and shorter series: z-score > 1.5 for 2 or more consecutive weeks. Both methods require sustained elevation, a single noisy week above threshold is not counted as a surge. The Rₜ threshold of 1.2 rather than the biological boundary of 1.0 was chosen deliberately to reduce false positives during periods of marginal transmission growth.
 
-*Handling Class Imbalance*
+#### Handling Class Imbalance
 
 Surge weeks are rare, only about 7% of all training observations are labelled as surges. If left unaddressed, a model could achieve 93% accuracy by simply predicting "not surge" every single week, which is completely useless for early warning. We apply SMOTE (Synthetic Minority Oversampling Technique) to the training data, which generates synthetic surge examples in feature space rather than just copying existing ones. Critically, SMOTE is applied only to the training set, the held-out test sets remain untouched and reflect real-world class imbalance.
 
-*Classification Models*
+#### Classification Models
 
 We train four classifiers on the global COVID training data and evaluate all of them on the held-out test sets without any retraining:
 
@@ -87,19 +87,19 @@ XGBoost- regularized gradient boosting, also tuned with RandomizedSearchCV
 
 Hyperparameter tuning runs 300 total model fits per tuned model (30 random combinations × 5 folds). The primary metric throughout is ROC-AUC, not accuracy- because accuracy is misleading when one class represents only 7% of the data.
 
-*Threshold Recalibration*
+#### Threshold Recalibration
 
 When we applied the COVID-trained model to RSV data, F1 score came back as zero. The model was ranking surge weeks correctly (AUC was fine) but it was never actually predicting surge, because every RSV probability fell below the default threshold of 0.5, which had been calibrated on COVID data. We fixed this by finding the threshold that maximizes F1 for each disease using precision-recall curve optimization. This is a realistic deployment approach, it requires only a small amount of disease-specific validation data and no retraining of the model itself.
 
-*Regression Models*
+#### Regression Models
 
 Beyond detecting whether a surge will happen, we also predict how big it will be. Five regression models predict future cases per 100,000 at 2, 4, 6, and 8-week horizons: Linear Regression, Ridge Regression, Random Forest Regressor, Gradient Boosting Regressor, and XGBoost Regressor. Random Forest Regressor performed best across all horizons. Results are reported in cases per 100,000 to maintain real-world interpretability.
 
-*Horizon Analysis*
+#### Horizon Analysis
 
 The most important experiment in the project. We shift the surge label forward by 1, 2, 3, 4, 6, and 8 weeks and measure how well the model predicts at each horizon. This separates genuine predictive capability from autocorrelation, at h=0, the model is essentially confirming what it already knows from this week's features. The operationally meaningful number is AUC at 4 weeks ahead, because that is the horizon at which a health agency can realistically pre-position resources and issue advisories before a surge peaks.
 
-*Geographic Propagation Analysis*
+#### Geographic Propagation Analysis
 
 We compute state-level Rₜ separately for NSW, VIC, QLD, WA, and SA using the same pipeline applied to NNDSS state-level RSV counts. Cross-correlation analysis identifies how many weeks ahead each state pair is correlated. Granger causality tests confirm whether past NSW Rₜ statistically predicts future VIC Rₜ beyond what VIC's own history provides. This analysis is Australia only, New Zealand's PHF Science data is national only with no regional breakdown available.
 
@@ -118,7 +118,7 @@ We compute state-level Rₜ separately for NSW, VIC, QLD, WA, and SA using the s
 
 ## Results
 
-### Classification: Surge Detection — Australia COVID (Test 1)
+### Classification: Surge Detection- Australia COVID (Test 1)
 
 The model was trained on 238 countries (75,840 weekly observations) and tested on held-out Australia (310 weeks, 27 surge weeks). All four models achieved strong current-period detection:
 
@@ -129,7 +129,7 @@ The model was trained on 238 countries (75,840 weekly observations) and tested o
 | Gradient Boosting | 1.000 | 0.981 | 1.000 | 0.963 |
 | XGBoost | 1.000 | 0.962 | 1.000 | 0.927 |
 
-**Important caveat:** AUC ≈ 1.0 at horizon=0 reflects autocorrelation — features like lag_1 and Rₜ are derived from recent cases, and the surge label is also Rₜ-derived. This is expected in epidemic data and not operationally meaningful. The horizon analysis below is the true measure of early warning capability.
+**Important caveat:** AUC ≈ 1.0 at horizon=0 reflects autocorrelation, features like lag_1 and Rₜ are derived from recent cases, and the surge label is also Rₜ-derived. This is expected in epidemic data and not operationally meaningful. The horizon analysis below is the true measure of early warning capability.
 
 ### Horizon Analysis: How Early Can We Warn? (AUS COVID)
 
@@ -171,7 +171,7 @@ New Zealand COVID-19 data was held out from training entirely and used as a seco
 
 Gradient Boosting achieved the best AUC at 0.993, nearly identical to the Australia COVID result, confirming that surge dynamics learned from global COVID data transfer cleanly to a new country the model has never seen.
 
-### Cross-Disease + Cross-Country — New Zealand RSV (Test 4)
+### Cross-Disease + Cross-Country- New Zealand RSV (Test 4)
  
 The most challenging evaluation: a COVID-trained model applied to RSV data from a country it never saw. Results on 112 weeks (76.6% surge weeks):
 
@@ -201,7 +201,7 @@ NSW → WA: p = 0.007
 NSW consistently leads other states by 2 to 8 weeks, establishing it as Australia's early warning state for RSV. A health officer in Victoria watching NSW Rₜ today has a structural 4-week warning signal, independent of the machine learning model entirely.
 
 ### Feature Importance
-The three most important features driving surge prediction are Rₜ (42%), 4-week growth rate (24.5%), and z-score anomaly (11%). This confirms that epidemiologically grounded features — particularly the reproduction number, are central to the model's predictive power, not just statistical artifacts of the lag structure.
+The three most important features driving surge prediction are Rₜ (42%), 4-week growth rate (24.5%), and z-score anomaly (11%). This confirms that epidemiologically grounded features, particularly the reproduction number, are central to the model's predictive power, not just statistical artifacts of the lag structure.
 
 An ablation study confirms Rₜ contributes genuine signal: removing it reduces AUC from 1.000 to 0.999, a small but meaningful drop showing that lags and z-score carry independent signal and the model is not simply a threshold detector on Rₜ alone.
 
@@ -210,9 +210,9 @@ A live Streamlit dashboard operationalizes all findings for stakeholder use. It 
 
 ## Discussion
 
-INFERRA set out to answer a simple but ambitious question: can a model trained on one disease in one part of the world warn us about a completely different disease somewhere else? The answer, with important nuance, is yes. Logistic Regression, the best-generalizing model across all four test sets, achieves AUC = 0.976 at 1 week ahead and 0.710 at 4 weeks ahead, staying above the 0.7 actionable threshold across the full 1 to 4 week window. For a CDNA surge officer, that window is exactly what is needed to pre-position antiviral stockpiles, put hospital surge plans on standby, and prepare public communications before beds start filling. Beyond 4 weeks the model loses confidence — not because of any flaw in the approach, but because epidemics are genuinely unpredictable that far out. No model can read a superspreader event or a new variant from a case count time series months in advance.
+INFERRA set out to answer a simple but ambitious question: can a model trained on one disease in one part of the world warn us about a completely different disease somewhere else? The answer, with important nuance, is yes. Logistic Regression, the best-generalizing model across all four test sets, achieves AUC = 0.976 at 1 week ahead and 0.710 at 4 weeks ahead, staying above the 0.7 actionable threshold across the full 1 to 4 week window. For a CDNA surge officer, that window is exactly what is needed to pre-position antiviral stockpiles, put hospital surge plans on standby, and prepare public communications before beds start filling. Beyond 4 weeks the model loses confidence, not because of any flaw in the approach, but because epidemics are genuinely unpredictable that far out. No model can read a superspreader event or a new variant from a case count time series months in advance.
 
-The cross-disease result is the heart of the project. Logistic Regression achieves AUC = 0.920 on Australian RSV despite never having seen a single RSV data point during training, confirming that surge dynamics, exponential growth, Rₜ rising above 1, anomalous z-score elevation, follow a common mathematical pattern regardless of the specific virus. One important caveat is that probability calibration does not transfer automatically. The model ranked surge weeks correctly but never predicted surge at the default 0.5 threshold because RSV produces systematically lower probabilities than COVID. A threshold recalibration using PR curve optimization fixed this, bringing AUS RSV F1 from 0 to 0.848 and NZ RSV F1 to 0.911, a one-time lightweight step that requires no retraining. Unexpectedly, simpler models generalized better: Random Forest and XGBoost after 300 model fits of tuning achieved RSV AUC of only 0.536 and 0.592, far below untuned Logistic Regression at 0.920. This is the bias-variance tradeoff across domains — models optimized for COVID patterns lose the structural generality needed to transfer to a different disease.
+The cross-disease result is the heart of the project. Logistic Regression achieves AUC = 0.920 on Australian RSV despite never having seen a single RSV data point during training, confirming that surge dynamics, exponential growth, Rₜ rising above 1, anomalous z-score elevation, follow a common mathematical pattern regardless of the specific virus. One important caveat is that probability calibration does not transfer automatically. The model ranked surge weeks correctly but never predicted surge at the default 0.5 threshold because RSV produces systematically lower probabilities than COVID. A threshold recalibration using PR curve optimization fixed this, bringing AUS RSV F1 from 0 to 0.848 and NZ RSV F1 to 0.911, a one-time lightweight step that requires no retraining. Unexpectedly, simpler models generalized better: Random Forest and XGBoost after 300 model fits of tuning achieved RSV AUC of only 0.536 and 0.592, far below untuned Logistic Regression at 0.920. This is the bias-variance tradeoff across domains, models optimized for COVID patterns lose the structural generality needed to transfer to a different disease.
 
 The Granger causality analysis adds something the machine learning model alone cannot provide, a structural early warning signal that requires no model inference at all. NSW RSV surges predict Victorian surges 4 weeks later (p = 0.002), SA surges with p = 0.001, and WA surges with p = 0.007. A health officer in Melbourne watching NSW Rₜ today has a free 4-week warning built into the geographic structure of how RSV moves across Australia. New Zealand RSV is the weakest result at AUC = 0.567, but the cause is not model failure, with 76.6% of weeks labelled as surge due to the post-COVID rebound, the model has almost no normal baseline to learn from. The identical pipeline on Australian RSV with 8 years of balanced data achieves 0.920. This is a data availability constraint, not a generalization failure.
 
@@ -230,9 +230,9 @@ Finally, while threshold recalibration successfully recovered F1 scores for RSV,
 
 ## Future Work
 
-The most natural next step is extending the test set to non-respiratory diseases. Dengue and measles are the strongest candidates — both have well-documented surge dynamics, global WHO surveillance data, and fundamentally different transmission characteristics from respiratory viruses. Testing whether a COVID-trained model can detect a dengue surge in a tropical country would be the ultimate stress test of cross-disease generalization, and would tell us whether the transferable signal we found is specific to respiratory viruses or genuinely disease-agnostic.
+The most natural next step is extending the test set to non-respiratory diseases. Dengue and measles are the strongest candidates, both have well-documented surge dynamics, global WHO surveillance data, and fundamentally different transmission characteristics from respiratory viruses. Testing whether a COVID-trained model can detect a dengue surge in a tropical country would be the ultimate stress test of cross-disease generalization, and would tell us whether the transferable signal we found is specific to respiratory viruses or genuinely disease-agnostic.
 
-The NZ RSV result will improve on its own over time. As PHF Science accumulates more years of virology data beyond the 2022 post-COVID rebound, the surge-to-normal ratio will balance out and the test set will become more representative. Re-evaluating Test 4 in a year or two — with a fuller baseline, would give a much more honest picture of cross-country RSV generalization than the current data allows.
+The NZ RSV result will improve on its own over time. As PHF Science accumulates more years of virology data beyond the 2022 post-COVID rebound, the surge-to-normal ratio will balance out and the test set will become more representative. Re-evaluating Test 4 in a year or two, with a fuller baseline, would give a much more honest picture of cross-country RSV generalization than the current data allows.
 
 On the modeling side, incorporating mobility data is the most promising avenue for improvement. The Granger finding that NSW leads Victoria by 4 weeks is consistent with travel patterns between Sydney and Melbourne, but the model itself does not use any mobility information at all. Explicitly including airline passenger volumes or internal travel flows could sharpen the geographic propagation signal and potentially extend it to New Zealand, where no state-level breakdown currently exists.
 
