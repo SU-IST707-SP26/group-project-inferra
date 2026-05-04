@@ -35,8 +35,8 @@
 - ❌ M4.T3 — Singapore dashboard deferred to future work
 
 ### Milestone 5: Presentation (Checkpoint 3)
-- [ ] M5.T1 — Create 7-8 slide presentation per rubric (Team)
-- [ ] M5.T2 — Rehearse presentation (Team)
+- ✅ M5.T1 — Create 7-8 slide presentation per rubric (Team)
+- ✅ M5.T2 — Rehearse presentation (Team)
 
 ### Milestone 6: Final Report & Submission
 - ✅ M6.T1 — Rename Code/ folder to work/ per rubric requirements (JS)
@@ -51,7 +51,7 @@
   - ✅ M6.T3g — Limitations and Future Work (IM)
 - ✅ M6.T4 — Create supporting files index in report (JS)
 - ✅ M6.T5 — Remove data files from repo, provide download links instead (JS)
-- ⏳ M6.T6 — Final review and submission (Team)
+- ✅ M6.T6 — Final review and submission (Team)
 
 ## Changelog
 
