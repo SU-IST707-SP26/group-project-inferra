@@ -113,7 +113,7 @@ We compute state-level Rₜ separately for NSW, VIC, QLD, WA, and SA using the s
 | `work/data_extract_aus_biweekly.ipynb` | Extracts RSV and Measles subsets from merged NNDSS |
 | `work/modeling_v1_aus_only.ipynb` | Initial modeling: Australia-only, 80/20 split, 4 classifiers |
 | `work/modeling_v2_global_with_regression.ipynb` | Final modeling: global training, Aus/RSV test sets, regression + classification, horizon analysis |
-| `work/NZ_Airborne_Disease_Scraper` | Scrapes PHF Science PDF reports, extracts and cleans NZ virology data, converts epi-weeks to dates, aggregates influenza subtypes into weekly time series |
+| `work/nz_airborne_disease_scraper.ipynb` | Scrapes PHF Science PDF reports, extracts and cleans NZ virology data, converts epi-weeks to dates, aggregates influenza subtypes into weekly time series |
 | `inferra_dashboard/app.py` | Streamlit dashboard for stakeholder use |
 
 ## Results
